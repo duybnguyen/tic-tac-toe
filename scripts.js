@@ -1,11 +1,20 @@
-function Gameboard(playerOne, playerTwo) {
-    let board = ['', '', '', '', '', '', '', '', ''];
-    let playerTurn = playerOne;
-    const endModal = document.querySelector('.end-modal')
-    const gameContainer = document.querySelector('.game-container');
+class Gameboard {
 
-    const checkForWin = () => {
+    constructor(playerOne, playerTwo) {
+        this.board = ['', '', '', '', '', '', '', '', ''];
+        this.playerOne = playerOne
+        this.playerTwo = playerTwo
+        !this.playerOne ? this.playerOne = 'Player 1' : this.playerOne
+        !this.playerTwo ? this.playerTwo = 'Player 2' : this.playerTwo
+        this.playerTurn = this.playerOne;
+        this.endModal = document.querySelector('.end-modal')
+        this.gameContainer = document.querySelector('.game-container');
+        this.gameMsg = document.querySelector('.game-msg')
+    }
+    
 
+    checkForWin = () => {
+        const { board, endModal, gameMsg } = this
         if (board[0] === board[1] && board[1] === board[2] && board[0] !== '' || // checking horizontal
             board[3] === board[4] && board[4] === board[5] && board[3] !== '' ||
             board[6] === board[7] && board[7] === board[8] && board[6] !== '' ||
@@ -16,15 +25,21 @@ function Gameboard(playerOne, playerTwo) {
             board[2] === board[4] && board[4] === board[6] && board[2] !== '') {
 
                 endModal.showModal()
+                gameMsg.textContent = 'Game Over'
+        } else if (!board.includes('')) {
+            endModal.showModal()
+            gameMsg.textContent = 'Game Over'
         }
         return false
     };
 
-    const generateBoard = () => {
+    generateBoard = () => {
+        let { playerTurn, board, playerOne, playerTwo, gameMsg, gameContainer } = this
         board.forEach((square, i) => {
             let gameSquare = document.createElement('div');
             gameSquare.classList.add('game-square');
             gameSquare.textContent = square;
+            gameMsg.textContent = `${playerTurn}'s Turn`
             gameSquare.addEventListener('click', () => {
                 if (board[i] !== '') {
                     return
@@ -37,35 +52,40 @@ function Gameboard(playerOne, playerTwo) {
                     board[i] = 'O'
                 }
                 playerTurn === playerOne ? playerTurn = playerTwo : playerTurn = playerOne;
-                checkForWin();
+                gameMsg.textContent = `${playerTurn}'s Turn`
+                this.checkForWin();
             });
             gameContainer.appendChild(gameSquare);
+            gameContainer.classList.add('game-start')
         });
     };
 
-    const restartGame = () => {
+    restartGame = () => {
+        const { endModal, gameContainer, playerOne }  = this
         endModal.close()
-        board = ['', '', '', '', '', '', '', '', ''];
+        this.board = ['', '', '', '', '', '', '', '', ''];
         gameContainer.textContent = ''
-        generateBoard()
+        this.generateBoard()
         this.playerTurn = playerOne
     }
-
-    return {
-        generateBoard,
-        restartGame
-    };
 }
 
 const startModal = document.querySelector('.start-modal')
 
-const game = Gameboard('Betty', 'Duy');
-
 
 document.querySelector('.start').addEventListener('click', () => {
+    const startPlayerOne = document.querySelector('#player-one').value
+    const startPlayerTwo = document.querySelector('#player-two').value
+
+    const game = new Gameboard(startPlayerOne, startPlayerTwo);
     startModal.close()
     game.generateBoard();
-})
-document.querySelector('.restart').addEventListener('click', () => game.restartGame())
+    document.querySelector('.change-player').addEventListener('click', () => {
+        game.gameContainer.textContent = ''
+        startModal.showModal()
+        game.endModal.close()
+    })
 
-startModal.showModal( )
+    document.querySelector('.restart').addEventListener('click', () => game.restartGame())
+})
+

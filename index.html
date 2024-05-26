@@ -8,29 +8,45 @@
     <script src="scripts.js" defer></script>
 </head>
 <body>
-    <dialog class="start-modal">
-        <header>
+    <dialog class="start-modal" open="">
+        <div class="start-container">
             <h1>Tic-Tac-Toe</h1>
             <form action="">
                 <label for="player-one">Player One
-                    <input type="text" id="player-one" name="player-one" placeholder="Enter name">
+                    <input type="text" id="player-one" name="player-one" placeholder="Enter name" required>
                 </label>
     
                 <label for="player-one">Player Two
-                    <input type="text" id="player-two" name="player-two" placeholder="Enter name">
+                    <input type="text" id="player-two" name="player-two" placeholder="Enter name" required>
                 </label>
     
             </form>
             <button class="start" type="submit">START GAME</button>
-        </header>
+        </div>
     </dialog>
 
-    <main class="game-container"></main>
+    <main>
+        <h2>Tic-Tac-Toe</h2>
+        <p class="game-msg"></p>
+        <div class="game-container">
+
+        </div>
+    </main>
 
     <dialog class="end-modal">
-        <h2>Game Over!</h2>
-        <h3 class="win-msg"></h3>
-        <button class="restart">PLAY AGAIN</button>
+        <div class="end-container">
+            <h2>Game Over!</h2>
+            <h3 class="win-msg"></h3>
+            <div class="button-container">
+                <button class="restart">PLAY AGAIN</button>
+                <button class="change-player">CHANGE PLAYERS</button>
+            </div>
+        </div>
     </dialog>
+
+    <footer>
+        <img src="./images/github.png" alt="github icon">
+        <a href="https://github.com/duynguyen-js/tic-tac-toe" target="_blank" >duynguyen-js</a>
+    </footer>
 </body>
 </html>
